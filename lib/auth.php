@@ -4395,12 +4395,6 @@ function is_user_perms_valid($user_id) {
  * @return (bool)   true if password hash matches, false otherwise
  */
 function compat_password_verify($password, $hash) {
-	if (function_exists('password_verify')) {
-		if (password_verify($password, $hash)) {
-			return true;
-		}
-	}
-
 	$md5 = md5($password);
 
 	return ($md5 == $hash);
@@ -4416,13 +4410,6 @@ function compat_password_verify($password, $hash) {
  * @return (bool)   true if password hash matches, false otherwise
  */
 function compat_password_hash($password, $algo, $options = array()) {
-	if (function_exists('password_hash')) {
-		// Check if options array has anything, only pass when required
-		return (cacti_sizeof($options) > 0) ?
-			password_hash($password, $algo, $options) :
-			password_hash($password, $algo);
-	}
-
 	return md5($password);
 }
 
@@ -4437,14 +4424,7 @@ function compat_password_hash($password, $algo, $options = array()) {
  * @return (bool)   true if password hash needs changing, false otherwise
  */
 function compat_password_needs_rehash($password, $algo, $options = array()) {
-	if (function_exists('password_needs_rehash')) {
-		// Check if options array has anything, only pass when required
-		return (cacti_sizeof($options) > 0) ?
-			password_needs_rehash($password, $algo, $options) :
-			password_needs_rehash($password, $algo);
-	}
-
-	return true;
+	return false;
 }
 
 /**
